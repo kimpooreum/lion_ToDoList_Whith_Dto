@@ -26,11 +26,16 @@ public class SignupController {
 
     @PostMapping("/signup")
     public String doSignup(
-        @Valid @ModelAttribute("signupDto") SignupDto signupDTO,
+        @Valid @ModelAttribute SignupDto signupDTO,
         BindingResult bindingResult,
         Model model
     ) {
         if (bindingResult.hasErrors()) {
+            return "signup";
+        }
+        if (userRepository.findByUsername(signupDTO.getUsername()) != null) {
+            model.addAttribute("error", "이미 사용중인 아이디입니다.");
+
             return "signup";
         }
 
